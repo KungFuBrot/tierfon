@@ -65,6 +65,19 @@ public class CallActivity extends BaseActivity {
         view.release();
     }
 
+    private static Animal create(String id) {
+        switch (String.valueOf(id)) {
+            case "raccoon":
+                return new Raccoon();
+            case "hedgehog":
+                return new Hedgehog();
+            case "fox":
+                return new Fox();
+            default:
+                return new Frog();
+        }
+    }
+
     private final class CallView extends View {
         private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Synth.Clip ring = new Synth.Clip(Synth.ring());
@@ -124,7 +137,7 @@ public class CallActivity extends BaseActivity {
                 c.drawCircle(w / 2, h / 2, w * 0.12f, p);
                 if (ringLeft <= 0) {
                     ring.stop();
-                    animal = new Frog();
+                    animal = create(getIntent().getStringExtra("animal"));
                     animal.start();
                 }
             } else {

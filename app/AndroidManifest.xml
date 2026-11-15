@@ -64,6 +64,7 @@
             <intent-filter>
                 <action android:name="de.kungfubrot.tierfon.RELEASE" />
                 <action android:name="de.kungfubrot.tierfon.SET_USED" />
+                <action android:name="de.kungfubrot.tierfon.SET_PIN" />
             </intent-filter>
         </receiver>
     </application>

@@ -79,6 +79,59 @@ class TileView extends View {
                 c.drawArc(-36, -38, 36, 34, 25, 130, false, p);
                 p.setStyle(Paint.Style.FILL);
                 break;
+            case "raccoon":
+                for (int sx = -1; sx <= 1; sx += 2) {
+                    p.setColor(0xFF9AA0A6);
+                    c.drawCircle(sx * 42, -42, 20, p);
+                    p.setColor(0xFF4A4F57);
+                    c.drawCircle(sx * 42, -41, 10, p);
+                }
+                p.setColor(0xFF9AA0A6);
+                c.drawOval(-64, -44, 64, 62, p);
+                p.setColor(0xFF4A4F57);
+                c.drawOval(-56, -18, -4, 18, p);
+                c.drawOval(4, -18, 56, 18, p);
+                p.setColor(WHITE);
+                c.drawOval(-26, 12, 26, 50, p);
+                c.drawCircle(-30, 0, 10, p);
+                c.drawCircle(30, 0, 10, p);
+                p.setColor(0xFF222222);
+                c.drawCircle(-30, 0, 5, p);
+                c.drawCircle(30, 0, 5, p);
+                c.drawCircle(0, 22, 7, p);
+                break;
+            case "hedgehog":
+                p.setColor(0xFF6B4A2B);
+                for (int i = 0; i < 9; i++) {
+                    double a = Math.toRadians(190 + i * 20);
+                    double w = Math.toRadians(11);
+                    poly(c, (float) Math.cos(a - w) * 58, (float) Math.sin(a - w) * 58,
+                        (float) Math.cos(a + w) * 58, (float) Math.sin(a + w) * 58,
+                        (float) Math.cos(a) * 80, (float) Math.sin(a) * 80);
+                }
+                p.setColor(0xFF8B5E3C);
+                c.drawCircle(0, 0, 62, p);
+                p.setColor(0xFFF6DDB8);
+                c.drawOval(-46, -12, 46, 66, p);
+                p.setColor(0xFF222222);
+                c.drawCircle(-18, 14, 6, p);
+                c.drawCircle(18, 14, 6, p);
+                c.drawCircle(0, 32, 8, p);
+                break;
+            case "fox":
+                p.setColor(0xFFF08A3C);
+                poly(c, -62, -14, -46, -76, -12, -40);
+                poly(c, 62, -14, 46, -76, 12, -40);
+                c.drawOval(-64, -44, 64, 60, p);
+                p.setColor(0xFFFFF3E6);
+                c.drawOval(-62, 6, -4, 58, p);
+                c.drawOval(4, 6, 62, 58, p);
+                c.drawOval(-26, 12, 26, 60, p);
+                p.setColor(0xFF222222);
+                c.drawCircle(-26, -6, 7, p);
+                c.drawCircle(26, -6, 7, p);
+                c.drawCircle(0, 26, 8, p);
+                break;
             case "note":
                 c.drawCircle(-34, 40, 22, p);
                 c.drawCircle(36, 26, 22, p);

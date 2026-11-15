@@ -2,11 +2,11 @@
 
 Ein Kindertelefon zum Spielen auf einem alten Moto G (3. Generation). Das Kind kann Tiere „anrufen“, Musik hören und Fotos ansehen, höchstens 30 Minuten am Tag. Internet gibt es auf dem Gerät nicht.
 
-**Stand:** Die App läuft auf dem Moto G: Startbildschirm, Tierauswahl, Anruf beim Frosch, Musikplayer (noch ohne Lieder getestet) und das Zeitlimit mit Batteriesymbol. Die Sperre ist programmiert, aber auf dem Gerät noch nicht aktiviert.
+**Stand:** Die App läuft auf dem Moto G mit vier Tieren (Frosch, Waschbär, Igel, Fuchs), Musikplayer und Zeitlimit. Galerie und Kamera sind für das Kind gesperrt und im Elternbereich freischaltbar. Die Sperre ist programmiert, aber auf dem Gerät noch nicht aktiviert. Für Eltern gibt es die [Anleitung](ANLEITUNG.md). Einige Abschnitte weiter unten beschreiben noch den Stand mit sichtbarer Galerie.
 
-| Startbildschirm | Anruf beim Frosch | Musik |
+| Startbildschirm | Tierauswahl | Anruf beim Fuchs |
 |---|---|---|
-| ![Startbildschirm](shots/home.png) | ![Frosch](shots/call.png) | ![Musik](shots/music.png) |
+| ![Startbildschirm](shots/home.png) | ![Tierauswahl](shots/animals.png) | ![Fuchs](shots/fox.png) |
 
 ## Zielgerät
 
@@ -54,7 +54,7 @@ Die App selbst hat keine Internet-Berechtigung.
 1. **Am Telefon:** Auf dem Startbildschirm (oder auf dem schwarzen Bildschirm) die rechte obere Ecke drei Sekunden gedrückt halten und die PIN eingeben. Der Elternbereich setzt Sperre und Zeitlimit für 15 Minuten aus und führt zu den Bluetooth- und Android-Einstellungen. Dort lässt sich die Sperre auch vollständig aufheben.
 2. **Am PC:** `scripts/freigeben.sh` hebt die Sperre über USB auf und blendet alle Apps wieder ein. Dafür bleibt das USB-Debugging eingeschaltet.
 
-Die PIN ist nach der Installation `2580` und sollte im Elternbereich sofort geändert werden.
+Die PIN wird beim Einrichten gesetzt: `bash scripts/einrichten.sh 1234`. Ohne Angabe gilt `2580`.
 
 ## Bauen und einrichten
 

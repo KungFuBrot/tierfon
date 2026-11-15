@@ -2,6 +2,7 @@ package de.kungfubrot.tierfon;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 
 import java.util.Random;
 
@@ -25,6 +26,7 @@ abstract class Animal {
 
     protected final Random rng = new Random();
     protected final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Path path = new Path();
     private final Synth.Clip[] clips = new Synth.Clip[6];
     private float heard;
     private float listenTime;
@@ -135,6 +137,47 @@ abstract class Animal {
 
     private static float toward(float v, float target, float step) {
         return v < target ? Math.min(target, v + step) : Math.max(target, v - step);
+    }
+
+    protected void tri(Canvas c, int color, float x0, float y0, float x1, float y1,
+            float x2, float y2) {
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(color);
+        path.rewind();
+        path.moveTo(x0, y0);
+        path.lineTo(x1, y1);
+        path.lineTo(x2, y2);
+        path.close();
+        c.drawPath(path, paint);
+    }
+
+    /** Ein Auge, das blinzelt, sich umsieht und beim Zuhören größer wird. */
+    protected void eye(Canvas c, float x, float y, float r) {
+        float open = 1 - blink;
+        float rr = r * (1 + attention * 0.1f);
+        oval(c, x, y, rr, Math.max(3, rr * open), 0xFFFFFFFF);
+        if (open > 0.3f) {
+            float lx = (float) Math.sin(time * 0.7) * r * 0.14f;
+            float ly = (float) Math.cos(time * 0.5) * r * 0.07f - attention * r * 0.14f;
+            float pr = r * (0.48f + attention * 0.1f);
+            oval(c, x + lx, y + ly, pr, pr * open, 0xFF222222);
+            oval(c, x + lx - pr * 0.3f, y + ly - pr * 0.4f, pr * 0.3f, pr * 0.3f * open, 0xFFFFFFFF);
+        }
+    }
+
+    /** Mund mit der Unterkante bei y: Lächeln, oder offen beim Sprechen. */
+    protected void mouthShape(Canvas c, float x, float y, float w, int lineColor) {
+        if (mouth < 0.05f) {
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(Math.max(6, w * 0.12f));
+            paint.setStrokeCap(Paint.Cap.ROUND);
+            paint.setColor(lineColor);
+            c.drawArc(x - w, y - 2 * w, x + w, y, 30, 120, false, paint);
+        } else {
+            oval(c, x, y - w * 0.3f, w * 0.75f, w * 0.14f + mouth * w * 0.42f, 0xFF7A1F2B);
+            oval(c, x, y - w * 0.2f + mouth * w * 0.22f, w * 0.4f, w * 0.06f + mouth * w * 0.16f,
+                0xFFFF8FA3);
+        }
     }
 
     protected void oval(Canvas c, float cx, float cy, float rx, float ry, int color) {

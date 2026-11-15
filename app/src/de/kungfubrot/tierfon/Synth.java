@@ -76,6 +76,46 @@ final class Synth {
         return s;
     }
 
+    /**
+     * Allgemeiner Tierlaut. glide verschiebt die Tonhöhe über die Dauer; mit arch steigt sie
+     * erst und fällt dann wieder. pulse ist ein schnelles An- und Abschwellen (Knarren, Trillern).
+     */
+    private static short[] tone(float dur, float f0, float glide, boolean arch, float pulse,
+            float depth, double h2, double h3, double volume) {
+        int n = (int) (dur * RATE);
+        short[] s = new short[n];
+        double ph = 0;
+        for (int i = 0; i < n; i++) {
+            double t = i / (double) RATE;
+            double u = t / dur;
+            double bend = arch ? Math.sin(Math.PI * u) : u;
+            ph += 2 * Math.PI * f0 * (1 + glide * bend) / RATE;
+            double env = Math.pow(Math.sin(Math.PI * u), 0.5);
+            double am = 1 - depth + depth * (0.5 + 0.5 * Math.sin(2 * Math.PI * pulse * t));
+            double w = Math.sin(ph) + h2 * Math.sin(2 * ph) + h3 * Math.sin(3 * ph);
+            s[i] = (short) (Math.max(-1, Math.min(1, volume * env * am * w)) * 32767);
+        }
+        return s;
+    }
+
+    /** Waschbär: ein schnelles, helles Schnattern. */
+    static short[] chitter(Random r) {
+        return tone(range(r, 0.14f, 0.32f), range(r, 520f, 760f), range(r, -0.2f, 0.3f), false,
+            range(r, 22f, 34f), 0.9f, 0.5, 0.3, 0.4);
+    }
+
+    /** Igel: kurze, hohe Quiekser, die nach unten wegrutschen. */
+    static short[] squeak(Random r) {
+        return tone(range(r, 0.07f, 0.17f), range(r, 900f, 1300f), range(r, -0.35f, -0.1f), false,
+            range(r, 40f, 60f), 0.25f, 0.3, 0.1, 0.42);
+    }
+
+    /** Fuchs: ein kurzes Kläffen, das hochschnellt und wieder abfällt. */
+    static short[] yip(Random r) {
+        return tone(range(r, 0.1f, 0.24f), range(r, 420f, 600f), range(r, 0.35f, 0.8f), true,
+            range(r, 50f, 70f), 0.3f, 0.6, 0.35, 0.4);
+    }
+
     /** Klingelton: zwei kurze Triller. */
     static short[] ring() {
         int n = (int) (1.6 * RATE);

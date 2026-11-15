@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Richtet das Kindertelefon ein: App installieren, fremde Apps entfernen, Sperre aktivieren.
+# Aufruf: bash scripts/einrichten.sh [PIN]   (PIN: mindestens 4 Ziffern, sonst gilt 2580)
 # Voraussetzungen: USB-Debugging ist an, und auf dem Telefon ist KEIN Konto mehr eingerichtet
 # (Einstellungen -> Konten), sonst verweigert Android den Gerätebesitz.
 set -euo pipefail
@@ -12,6 +13,10 @@ PKG=de.kungfubrot.tierfon
 "$ADB" install -t -r build/tierfon.apk
 # Erlaubt das Batteriesymbol über Kamera und Galerie.
 "$ADB" shell appops set "$PKG" SYSTEM_ALERT_WINDOW allow
+if [ -n "${1:-}" ]; then
+  "$ADB" shell am broadcast -a "$PKG.SET_PIN" -n "$PKG/.ReleaseReceiver" --es pin "$1" >/dev/null
+  echo "Eltern-PIN gesetzt."
+fi
 
 echo "Entferne vom Nutzer installierte Apps ..."
 for p in $("$ADB" shell pm list packages -3 | tr -d '\r' | sed 's/^package://'); do

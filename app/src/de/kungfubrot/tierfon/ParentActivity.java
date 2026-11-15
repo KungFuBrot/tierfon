@@ -133,6 +133,11 @@ public class ParentActivity extends BaseActivity {
             Kiosk.setCameraAllowed(this, !cam);
             showMenu();
         }));
+        boolean gal = Kiosk.galleryAllowed(this);
+        col.addView(button(gal ? "Galerie für das Kind sperren" : "Galerie für das Kind freigeben", () -> {
+            Kiosk.setGalleryAllowed(this, !gal);
+            showMenu();
+        }));
         col.addView(button("Bluetooth-Einstellungen",
             () -> open(Settings.ACTION_BLUETOOTH_SETTINGS)));
         col.addView(button("Android-Einstellungen", () -> open(Settings.ACTION_SETTINGS)));

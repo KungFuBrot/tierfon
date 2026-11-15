@@ -16,17 +16,16 @@ public class AnimalsActivity extends BaseActivity {
         back.setOnClickListener(v -> finish());
         root.add(back, 0.04f, 0.02f, 0.24f, 0.1325f);
 
-        TileView frog = new TileView(this, 0xFFBDEAA8, "frog");
-        frog.setOnClickListener(v ->
-            startActivity(new Intent(this, CallActivity.class).putExtra("animal", "frog")));
-        root.add(frog, 0.06f, 0.18f, 0.48f, 0.52f);
-
-        // Igel, Waschbär und Brontosaurus kommen in Etappe 2.
-        float[][] cells = {{0.52f, 0.18f}, {0.06f, 0.56f}, {0.52f, 0.56f}};
-        for (float[] cell : cells) {
-            TileView t = new TileView(this, 0xFFFFFFFF, "unknown");
-            t.setEnabled(false);
-            root.add(t, cell[0], cell[1], cell[0] + 0.42f, cell[1] + 0.34f);
+        String[] ids = {"frog", "raccoon", "hedgehog", "fox"};
+        int[] colors = {0xFFBDEAA8, 0xFFCFD8E3, 0xFFF3D9B5, 0xFFFFD2A6};
+        for (int i = 0; i < ids.length; i++) {
+            String id = ids[i];
+            TileView t = new TileView(this, colors[i], id);
+            t.setOnClickListener(v ->
+                startActivity(new Intent(this, CallActivity.class).putExtra("animal", id)));
+            float x = i % 2 == 0 ? 0.06f : 0.52f;
+            float y = i < 2 ? 0.18f : 0.56f;
+            root.add(t, x, y, x + 0.42f, y + 0.34f);
         }
         setContentView(root);
     }

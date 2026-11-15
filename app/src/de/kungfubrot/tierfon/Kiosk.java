@@ -15,6 +15,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.UserManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -27,11 +28,11 @@ import java.util.Set;
 final class Kiosk {
     static final String CAMERA = "org.cyanogenmod.snap";
     static final String GALLERY = "com.android.gallery3d";
-    /** Apps, die das Kind immer benutzen darf. Die Kamera kommt nur dazu, wenn die Eltern sie freigeben. */
-    private static final String[] ALLOWED = {"de.kungfubrot.tierfon", GALLERY};
+    /** Das Kind darf immer nur Tierfon benutzen. Kamera und Galerie kommen dazu, wenn die Eltern sie freigeben. */
+    private static final String[] ALLOWED = {"de.kungfubrot.tierfon"};
     /** Bleiben vorhanden, sind in der Sperre aber nicht erreichbar. */
     private static final String[] KEEP = {
-        "com.android.settings", "org.cyanogenmod.audiofx", "com.android.documentsui", CAMERA};
+        "com.android.settings", "org.cyanogenmod.audiofx", "com.android.documentsui", CAMERA, GALLERY};
     private static final String[] RESTRICTIONS = {
         UserManager.DISALLOW_CONFIG_WIFI, UserManager.DISALLOW_INSTALL_APPS,
         UserManager.DISALLOW_SAFE_BOOT, UserManager.DISALLOW_ADD_USER};
@@ -76,9 +77,20 @@ final class Kiosk {
         if (isOwner(c)) dpm(c).setLockTaskPackages(admin(c), allowed(c));
     }
 
+    static boolean galleryAllowed(Context c) {
+        return prefs(c).getBoolean("gallery", false);
+    }
+
+    static void setGalleryAllowed(Context c, boolean on) {
+        prefs(c).edit().putBoolean("gallery", on).apply();
+        if (isOwner(c)) dpm(c).setLockTaskPackages(admin(c), allowed(c));
+    }
+
     private static String[] allowed(Context c) {
-        if (!cameraAllowed(c)) return ALLOWED;
-        return new String[] {ALLOWED[0], ALLOWED[1], CAMERA};
+        List<String> l = new ArrayList<>(Arrays.asList(ALLOWED));
+        if (galleryAllowed(c)) l.add(GALLERY);
+        if (cameraAllowed(c)) l.add(CAMERA);
+        return l.toArray(new String[0]);
     }
 
     static String pin(Context c) {
