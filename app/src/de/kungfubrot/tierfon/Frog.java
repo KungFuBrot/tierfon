@@ -18,6 +18,31 @@ final class Frog extends Animal {
     }
 
     @Override
+    String id() {
+        return "frog";
+    }
+
+    @Override
+    float mouthY() {
+        return -5;
+    }
+
+    @Override
+    void drawBackground(Canvas c, float w, float h) {
+        meadow(c, w, h, 0xFFBFE6FF, 0xFF8FD18A);
+        // Teich mit Seerosenblättern und Schilf
+        oval(c, w * 0.5f, h * 0.73f, w * 0.62f, h * 0.085f, 0xFF7EC8F0);
+        oval(c, w * 0.14f, h * 0.76f, w * 0.09f, h * 0.018f, 0xFF4FA35B);
+        oval(c, w * 0.88f, h * 0.71f, w * 0.08f, h * 0.016f, 0xFF4FA35B);
+        for (int i = 0; i < 3; i++) {
+            float x = w * (0.05f + i * 0.035f);
+            float sway = (float) Math.sin(time * 1.5 + i) * 6;
+            curve(c, 0xFF5E9E4A, 8, x, h * 0.66f, x + sway * 0.5f, h * 0.6f, x + sway, h * 0.54f);
+            oval(c, x + sway, h * 0.535f, 7, 22, 0xFF6B4A2B);
+        }
+    }
+
+    @Override
     void draw(Canvas c) {
         float breathe = (float) Math.sin(time * 2) * 6;
         float y = -hop - attention * 18;

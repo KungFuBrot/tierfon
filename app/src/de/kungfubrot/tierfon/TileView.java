@@ -79,27 +79,6 @@ class TileView extends View {
                 c.drawArc(-36, -38, 36, 34, 25, 130, false, p);
                 p.setStyle(Paint.Style.FILL);
                 break;
-            case "raccoon":
-                for (int sx = -1; sx <= 1; sx += 2) {
-                    p.setColor(0xFF9AA0A6);
-                    c.drawCircle(sx * 42, -42, 20, p);
-                    p.setColor(0xFF4A4F57);
-                    c.drawCircle(sx * 42, -41, 10, p);
-                }
-                p.setColor(0xFF9AA0A6);
-                c.drawOval(-64, -44, 64, 62, p);
-                p.setColor(0xFF4A4F57);
-                c.drawOval(-56, -18, -4, 18, p);
-                c.drawOval(4, -18, 56, 18, p);
-                p.setColor(WHITE);
-                c.drawOval(-26, 12, 26, 50, p);
-                c.drawCircle(-30, 0, 10, p);
-                c.drawCircle(30, 0, 10, p);
-                p.setColor(0xFF222222);
-                c.drawCircle(-30, 0, 5, p);
-                c.drawCircle(30, 0, 5, p);
-                c.drawCircle(0, 22, 7, p);
-                break;
             case "hedgehog":
                 p.setColor(0xFF6B4A2B);
                 for (int i = 0; i < 9; i++) {
@@ -118,19 +97,50 @@ class TileView extends View {
                 c.drawCircle(18, 14, 6, p);
                 c.drawCircle(0, 32, 8, p);
                 break;
-            case "fox":
-                p.setColor(0xFFF08A3C);
-                poly(c, -62, -14, -46, -76, -12, -40);
-                poly(c, 62, -14, 46, -76, 12, -40);
-                c.drawOval(-64, -44, 64, 60, p);
-                p.setColor(0xFFFFF3E6);
-                c.drawOval(-62, 6, -4, 58, p);
-                c.drawOval(4, 6, 62, 58, p);
-                c.drawOval(-26, 12, 26, 60, p);
+            case "brachio":
+                p.setColor(0xFF5BB8A6);
+                c.drawOval(-30, 8, 74, 62, p);
+                c.drawRect(-8, 44, 8, 76, p);
+                c.drawRect(44, 44, 60, 76, p);
+                poly(c, 66, 22, 94, 52, 66, 50);
+                p.setStyle(Paint.Style.STROKE);
+                p.setStrokeWidth(22);
+                p.setStrokeCap(Paint.Cap.ROUND);
+                path.rewind();
+                path.moveTo(-14, 26);
+                path.quadTo(-30, -20, -40, -50);
+                c.drawPath(path, p);
+                p.setStyle(Paint.Style.FILL);
+                c.drawOval(-74, -76, -20, -40, p);
+                p.setColor(WHITE);
+                c.drawCircle(-50, -61, 7, p);
                 p.setColor(0xFF222222);
-                c.drawCircle(-26, -6, 7, p);
-                c.drawCircle(26, -6, 7, p);
-                c.drawCircle(0, 26, 8, p);
+                c.drawCircle(-51, -61, 3.5f, p);
+                break;
+            case "ptero":
+                p.setColor(0xFFB9A6EE);
+                poly(c, -10, 0, -86, -30, -16, 46);
+                poly(c, 10, 0, 86, -30, 16, 46);
+                p.setColor(0xFF9B7EDE);
+                c.drawOval(-20, -6, 20, 64, p);
+                p.setColor(0xFF6F55B5);
+                poly(c, 4, -50, 54, -86, 26, -34);
+                p.setColor(0xFF9B7EDE);
+                c.drawCircle(0, -34, 28, p);
+                p.setColor(0xFFFFB84D);
+                poly(c, -14, -28, 14, -28, 0, 24);
+                p.setColor(WHITE);
+                c.drawCircle(-13, -42, 7, p);
+                c.drawCircle(13, -42, 7, p);
+                p.setColor(0xFF222222);
+                c.drawCircle(-13, -42, 3.5f, p);
+                c.drawCircle(13, -42, 3.5f, p);
+                break;
+            case "fly":
+            case "apple":
+            case "leaf":
+            case "fish":
+                Treats.draw(c, p, icon);
                 break;
             case "note":
                 c.drawCircle(-34, 40, 22, p);

@@ -65,6 +65,7 @@
                 <action android:name="de.kungfubrot.tierfon.RELEASE" />
                 <action android:name="de.kungfubrot.tierfon.SET_USED" />
                 <action android:name="de.kungfubrot.tierfon.SET_PIN" />
+                <action android:name="de.kungfubrot.tierfon.LOCK" />
             </intent-filter>
         </receiver>
     </application>

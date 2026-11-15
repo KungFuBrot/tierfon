@@ -16,8 +16,8 @@ public class AnimalsActivity extends BaseActivity {
         back.setOnClickListener(v -> finish());
         root.add(back, 0.04f, 0.02f, 0.24f, 0.1325f);
 
-        String[] ids = {"frog", "raccoon", "hedgehog", "fox"};
-        int[] colors = {0xFFBDEAA8, 0xFFCFD8E3, 0xFFF3D9B5, 0xFFFFD2A6};
+        String[] ids = {"frog", "hedgehog", "brachio", "ptero"};
+        int[] colors = {0xFFBDEAA8, 0xFFF3D9B5, 0xFFCDEFE6, 0xFFE0D6F7};
         for (int i = 0; i < ids.length; i++) {
             String id = ids[i];
             TileView t = new TileView(this, colors[i], id);

@@ -6,10 +6,17 @@ Tierfon ist ein Spieltelefon. Euer Kind kann damit Tiere „anrufen“ und Musik
 
 Der Startbildschirm zeigt zwei große Kacheln:
 
-- **Frosch:** Tiere anrufen. Zur Auswahl stehen Frosch, Waschbär, Igel und Fuchs.
+- **Frosch:** Tiere anrufen. Zur Auswahl stehen Frosch, Igel, Brachiosaurus und Pterodactylus.
 - **Note:** Musik hören.
 
-Beim Anruf klingelt es kurz, dann erscheint das Tier. Wenn euer Kind spricht, hört das Tier zu. Wird es still, antwortet das Tier in seiner Tiersprache. Antippen lässt es hüpfen. Der rote Knopf legt auf.
+Beim Anruf klingelt es kurz, dann erscheint das Tier. Euer Kind kann:
+
+- **mit dem Tier sprechen:** Das Tier hört zu. Wird es still, antwortet es in seiner Tiersprache.
+- **das Tier antippen:** Es hüpft, und Herzen steigen auf.
+- **das Tier füttern:** Der runde Knopf unten links wirft einen Leckerbissen. Das Tier schmatzt.
+- **laut rufen:** Das Tier erschrickt und springt hoch.
+
+Der rote Knopf legt auf.
 
 Das Mikrofon misst dabei nur die Lautstärke. Es wird nichts aufgenommen oder gespeichert.
 
@@ -19,6 +26,10 @@ Das Mikrofon misst dabei nur die Lautstärke. Es wird nichts aufgenommen oder ge
 - Gezählt wird nur, solange der Bildschirm an ist.
 - Ist die Zeit um, stoppt die Musik und der Bildschirm wird schwarz. Das Telefon reagiert dann nicht mehr.
 - Am nächsten Tag sind wieder 30 Minuten da.
+
+## Lautstärke
+
+Das Telefon wird höchstens 60 Prozent laut, auch mit Kopfhörern oder Bluetooth-Box. Die Lauter-Taste wirkt nur bis zu dieser Grenze. Im Elternbereich könnt ihr die Grenze auf 40, 60, 80 oder 100 Prozent stellen.
 
 ## Der Elternbereich
 
@@ -32,6 +43,7 @@ Im Elternbereich sind Sperre und Zeitlimit für 15 Minuten ausgesetzt. Dort kön
 | Knopf | Wirkung |
 |---|---|
 | Spielzeit zurücksetzen | Gibt heute noch einmal 30 Minuten |
+| Höchste Lautstärke | Wechselt bei jedem Tippen zwischen 40, 60, 80 und 100 Prozent |
 | Galerie für das Kind freigeben | Zeigt eine Kachel für die Fotos auf dem Telefon |
 | Kamera für das Kind freigeben | Zeigt eine Kachel für die Kamera |
 | Bluetooth-Einstellungen | Box oder Kopfhörer koppeln |
@@ -40,7 +52,7 @@ Im Elternbereich sind Sperre und Zeitlimit für 15 Minuten ausgesetzt. Dort kön
 | Sperre vollständig aufheben | Macht aus dem Tierfon wieder ein normales Telefon |
 | Wieder sperren | Beendet den Elternbereich sofort |
 
-Wenn ihr fertig seid, tippt auf **Wieder sperren**. Sonst endet der Elternbereich nach 15 Minuten von selbst.
+Wenn ihr fertig seid, tippt auf **Wieder sperren**. Der Knopf steht ganz unten, ihr müsst dafür nach unten wischen. Sonst endet der Elternbereich nach 15 Minuten von selbst.
 
 ## Musik aufs Telefon bringen
 

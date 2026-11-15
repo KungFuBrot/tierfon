@@ -44,7 +44,8 @@ public class BlockedActivity extends BaseActivity {
             } else if (e.getAction() == MotionEvent.ACTION_UP
                     || e.getAction() == MotionEvent.ACTION_CANCEL) {
                 v.removeCallbacks(openParent);
-                v.postDelayed(screenOff, SCREEN_OFF_MS);
+                // Nur ausschalten, wenn dieser Bildschirm noch vorn ist (nicht die PIN-Eingabe).
+                if (showing) v.postDelayed(screenOff, SCREEN_OFF_MS);
             }
             return true;
         });

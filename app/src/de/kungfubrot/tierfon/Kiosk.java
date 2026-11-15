@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.UserManager;
@@ -33,8 +34,18 @@ final class Kiosk {
     /** Bleiben vorhanden, sind in der Sperre aber nicht erreichbar. */
     private static final String[] KEEP = {
         "com.android.settings", "org.cyanogenmod.audiofx", "com.android.documentsui", CAMERA, GALLERY};
+    /**
+     * Google-Dienste ohne Start-Symbol. Ohne Konto und Internet haben sie keine Aufgabe und
+     * erzeugen sonst Fehlermeldungen, weil der Play Store ausgeblendet ist.
+     */
+    private static final String[] ALSO_HIDE = {
+        "com.google.android.gms", "com.google.android.gsf", "com.google.android.gsf.login",
+        "com.google.android.partnersetup", "com.google.android.feedback",
+        "com.google.android.backuptransport", "com.google.android.syncadapters.contacts",
+        "com.google.android.syncadapters.calendar", "com.google.android.configupdater",
+        "com.google.android.onetimeinitializer", "com.google.android.apps.turbo"};
     private static final String[] RESTRICTIONS = {
-        UserManager.DISALLOW_CONFIG_WIFI, UserManager.DISALLOW_INSTALL_APPS,
+        UserManager.DISALLOW_CONFIG_WIFI,
         UserManager.DISALLOW_SAFE_BOOT, UserManager.DISALLOW_ADD_USER};
     private static final long PARENT_MINUTES = 15;
 
@@ -91,6 +102,31 @@ final class Kiosk {
         if (galleryAllowed(c)) l.add(GALLERY);
         if (cameraAllowed(c)) l.add(CAMERA);
         return l.toArray(new String[0]);
+    }
+
+    /** Höchste erlaubte Lautstärke in Prozent, zum Schutz der Ohren. */
+    static int maxVolumePercent(Context c) {
+        return prefs(c).getInt("maxVolume", 60);
+    }
+
+    static void setMaxVolumePercent(Context c, int percent) {
+        prefs(c).edit().putInt("maxVolume", percent).apply();
+        enforceVolume(c);
+    }
+
+    static int volumeCap(Context c) {
+        AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+        int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        return Math.max(1, Math.round(max * maxVolumePercent(c) / 100f));
+    }
+
+    /** Dreht die Lautstärke zurück, falls sie über der Grenze liegt. */
+    static void enforceVolume(Context c) {
+        AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+        int cap = volumeCap(c);
+        if (am.getStreamVolume(AudioManager.STREAM_MUSIC) > cap) {
+            am.setStreamVolume(AudioManager.STREAM_MUSIC, cap, 0);
+        }
     }
 
     static String pin(Context c) {
@@ -154,6 +190,12 @@ final class Kiosk {
                     if (d.setApplicationHidden(ad, p, true)) hidden.add(p);
                 } catch (RuntimeException ignored) {
                 }
+            }
+        }
+        for (String p : ALSO_HIDE) {
+            try {
+                if (d.setApplicationHidden(ad, p, true)) hidden.add(p);
+            } catch (RuntimeException ignored) {
             }
         }
         prefs(c).edit().putStringSet("hidden", hidden).apply();

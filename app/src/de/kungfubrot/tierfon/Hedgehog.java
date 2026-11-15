@@ -17,6 +17,38 @@ final class Hedgehog extends Animal {
     }
 
     @Override
+    String id() {
+        return "hedgehog";
+    }
+
+    @Override
+    float mouthY() {
+        return 160;
+    }
+
+    @Override
+    void drawBackground(Canvas c, float w, float h) {
+        meadow(c, w, h, 0xFFCDEBFF, 0xFF7FBF6A);
+        // Wald im Hintergrund
+        for (int i = 0; i < 6; i++) {
+            float x = w * (0.02f + i * 0.2f);
+            float top = h * (0.36f + (i % 2) * 0.05f);
+            fill(c, x - 9, h * 0.56f, x + 9, h * 0.61f, 0xFF6B4A2B);
+            tri(c, 0xFF3E8F4A, x - w * 0.1f, h * 0.58f, x + w * 0.1f, h * 0.58f, x, top);
+            tri(c, 0xFF4FA35B, x - w * 0.075f, h * 0.5f, x + w * 0.075f, h * 0.5f, x, top - h * 0.03f);
+        }
+        // Pilze
+        for (int i = 0; i < 2; i++) {
+            float x = w * (0.12f + i * 0.78f);
+            float y = h * (0.7f + i * 0.04f);
+            fill(c, x - 9, y, x + 9, y + 34, 0xFFFFF3E6);
+            oval(c, x, y, 34, 22, 0xFFE5484D);
+            oval(c, x - 12, y - 6, 6, 5, 0xFFFFFFFF);
+            oval(c, x + 12, y - 2, 5, 4, 0xFFFFFFFF);
+        }
+    }
+
+    @Override
     void draw(Canvas c) {
         float y = -hop - attention * 14;
         float cy = 60 + y;

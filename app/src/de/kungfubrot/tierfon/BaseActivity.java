@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 /** Gemeinsames Verhalten aller Bildschirme: Vollbild, Sperre, Spielzeit und Batteriesymbol. */
@@ -41,6 +42,7 @@ abstract class BaseActivity extends Activity {
         super.onResume();
         Usage.resumed++;
         UsageService.ensureRunning(this);
+        Kiosk.enforceVolume(this);
         if (locks()) {
             Kiosk.lock(this);
             if (Usage.exhausted(this) && !(this instanceof BlockedActivity)) {
@@ -53,6 +55,16 @@ abstract class BaseActivity extends Activity {
     protected void onPause() {
         super.onPause();
         Usage.resumed = Math.max(0, Usage.resumed - 1);
+    }
+
+    /** Die Lauter-Taste wirkt nur bis zur Grenze, die die Eltern eingestellt haben. */
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
+            AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+            if (am.getStreamVolume(AudioManager.STREAM_MUSIC) >= Kiosk.volumeCap(this)) return true;
+        }
+        return super.dispatchKeyEvent(e);
     }
 
     @Override

@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 /** Elternbereich: nach der PIN lässt sich die Sperre aussetzen oder ganz aufheben. */
 public class ParentActivity extends BaseActivity {
+    /** Solange die PIN-Eingabe offen ist, darf der schwarze Bildschirm sie nicht überdecken. */
+    static boolean showing;
+
     private final StringBuilder entered = new StringBuilder();
     private TextView dots;
 
@@ -36,6 +39,18 @@ public class ParentActivity extends BaseActivity {
         } else {
             showPinPad();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showing = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        showing = false;
     }
 
     private LinearLayout column() {
@@ -126,6 +141,11 @@ public class ParentActivity extends BaseActivity {
         col.addView(label("Spielzeit heute: noch " + left + " von 30 Minuten.", 18));
         col.addView(button("Spielzeit zurücksetzen", () -> {
             Usage.setUsedMs(this, 0);
+            showMenu();
+        }));
+        int vol = Kiosk.maxVolumePercent(this);
+        col.addView(button("Höchste Lautstärke: " + vol + " %", () -> {
+            Kiosk.setMaxVolumePercent(this, vol >= 100 ? 40 : vol + 20);
             showMenu();
         }));
         boolean cam = Kiosk.cameraAllowed(this);

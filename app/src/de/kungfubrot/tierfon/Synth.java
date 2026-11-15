@@ -98,22 +98,38 @@ final class Synth {
         return s;
     }
 
-    /** Waschbär: ein schnelles, helles Schnattern. */
-    static short[] chitter(Random r) {
-        return tone(range(r, 0.14f, 0.32f), range(r, 520f, 760f), range(r, -0.2f, 0.3f), false,
-            range(r, 22f, 34f), 0.9f, 0.5, 0.3, 0.4);
-    }
-
     /** Igel: kurze, hohe Quiekser, die nach unten wegrutschen. */
     static short[] squeak(Random r) {
         return tone(range(r, 0.07f, 0.17f), range(r, 900f, 1300f), range(r, -0.35f, -0.1f), false,
             range(r, 40f, 60f), 0.25f, 0.3, 0.1, 0.42);
     }
 
-    /** Fuchs: ein kurzes Kläffen, das hochschnellt und wieder abfällt. */
-    static short[] yip(Random r) {
-        return tone(range(r, 0.1f, 0.24f), range(r, 420f, 600f), range(r, 0.35f, 0.8f), true,
-            range(r, 50f, 70f), 0.3f, 0.6, 0.35, 0.4);
+    /** Brachiosaurus: ein tiefes, langes Brummen, das nach unten abfällt. */
+    static short[] rumble(Random r) {
+        return tone(range(r, 0.35f, 0.7f), range(r, 150f, 210f), range(r, -0.25f, -0.05f), false,
+            range(r, 14f, 20f), 0.35f, 0.7, 0.5, 0.42);
+    }
+
+    /** Pterodactylus: ein hohes, flatterndes Kreischen. */
+    static short[] screech(Random r) {
+        return tone(range(r, 0.15f, 0.35f), range(r, 950f, 1400f), range(r, 0.2f, 0.5f), true,
+            range(r, 30f, 45f), 0.8f, 0.4, 0.2, 0.36);
+    }
+
+    /** Schmatzen: drei kurze, dumpfe Bisse. */
+    static short[] munch(Random r) {
+        int n = (int) (0.62 * RATE);
+        short[] s = new short[n];
+        for (int i = 0; i < n; i++) {
+            double t = i / (double) RATE;
+            double u = (t % 0.2) / 0.11;
+            if (u < 1) {
+                double tone = Math.sin(2 * Math.PI * 190 * t * (1 - 0.3 * u));
+                double noise = r.nextDouble() * 2 - 1;
+                s[i] = (short) ((0.5 * tone + 0.5 * noise) * Math.sin(Math.PI * u) * 0.38 * 32767);
+            }
+        }
+        return s;
     }
 
     /** Klingelton: zwei kurze Triller. */

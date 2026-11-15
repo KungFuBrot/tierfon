@@ -18,6 +18,11 @@ final class MicMeter extends Thread {
         return !paused && level > Math.max(0.04f, floor * 2.5f);
     }
 
+    /** Ein sehr lautes Geräusch, zum Beispiel ein Ruf direkt ins Telefon. */
+    boolean isLoud() {
+        return !paused && level > 0.6f;
+    }
+
     void shutdown() {
         running = false;
     }

@@ -70,6 +70,7 @@ public class UsageService extends Service {
         lastTick = now;
         boolean screenOn = ((PowerManager) getSystemService(POWER_SERVICE)).isInteractive();
         boolean parent = Kiosk.parentMode(this);
+        Kiosk.enforceVolume(this);
         if (screenOn && !parent && Usage.remainingMs(this) > 0) Usage.add(this, dt);
 
         if (!Usage.exhausted(this)) {
@@ -78,7 +79,7 @@ public class UsageService extends Service {
             if (blocked != null) blocked.finish();
         } else {
             Player.get(this).stop();
-            if (screenOn && !BlockedActivity.showing) {
+            if (screenOn && !BlockedActivity.showing && !ParentActivity.showing) {
                 startActivity(new Intent(this, BlockedActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }

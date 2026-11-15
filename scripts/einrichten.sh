@@ -29,5 +29,7 @@ echo "Trage Tierfon als Gerätebesitzer ein ..."
 "$ADB" shell dpm set-device-owner "$PKG/.AdminReceiver"
 
 # Beim ersten Start blendet Tierfon die übrigen Apps aus, löscht die WLANs und sperrt.
+# Einen noch laufenden Elternmodus beenden, damit die Sperre sofort greift.
+"$ADB" shell am broadcast -a "$PKG.LOCK" -n "$PKG/.ReleaseReceiver" >/dev/null
 "$ADB" shell am start -n "$PKG/.HomeActivity"
 echo "Fertig. Rückweg: Ecke oben rechts 3 Sekunden halten und PIN eingeben, oder scripts/freigeben.sh."

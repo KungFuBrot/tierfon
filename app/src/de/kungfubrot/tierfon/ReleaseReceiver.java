@@ -7,7 +7,7 @@ import android.content.Intent;
 /**
  * Rückwege vom PC. Nur die adb-Shell darf diese Nachrichten schicken:
  * RELEASE hebt die Sperre auf, SET_USED setzt die heute verbrauchte Spielzeit (Minuten),
- * SET_PIN setzt die Eltern-PIN.
+ * SET_PIN setzt die Eltern-PIN, LOCK beendet den Elternmodus sofort.
  */
 public class ReleaseReceiver extends BroadcastReceiver {
     @Override
@@ -20,6 +20,8 @@ public class ReleaseReceiver extends BroadcastReceiver {
             if (pin != null && pin.matches("\\d{4,}")) {
                 Kiosk.prefs(context).edit().putString("pin", pin).apply();
             }
+        } else if (action.endsWith(".LOCK")) {
+            Kiosk.setParentMode(context, false);
         } else if (action.endsWith(".RELEASE")) {
             Kiosk.release(context);
             Kiosk.setParentMode(context, true);
