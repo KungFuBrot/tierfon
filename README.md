@@ -2,7 +2,7 @@
 
 Ein Kindertelefon zum Spielen auf einem alten Moto G (3. Generation). Das Kind kann Tiere „anrufen“ und Musik hören, höchstens 30 Minuten am Tag. Internet gibt es auf dem Gerät nicht.
 
-**Stand:** Die App läuft auf dem Moto G, und die Sperre ist dort aktiv. Getestet sind die vier Tiere, das Füttern, das Zeitlimit, die Lautstärkegrenze, die Sperre und beide Rückwege. Noch nicht getestet sind der Musikplayer mit echten Liedern und Bluetooth.
+**Stand:** Die App läuft auf dem Moto G, und die Sperre ist dort aktiv. Getestet sind die vier Tiere, das Füttern, der Musikplayer, das Zeitlimit, die Lautstärkegrenze, die Sperre und beide Rückwege. Noch nicht getestet ist Bluetooth.
 
 Für Eltern gibt es eine eigene [Anleitung](ANLEITUNG.md).
 
@@ -111,7 +111,8 @@ adb shell am broadcast -a de.kungfubrot.tierfon.SET_USED -n de.kungfubrot.tierfo
 
 ## Offene Punkte
 
-- Der Musikplayer ist noch nicht mit echten Liedern getestet, Bluetooth auch nicht.
+- Der Musikplayer ist mit Testdateien geprüft (MP3 und OGG, Pause, Weiter, Liedwechsel, Bildschirm aus, Stopp am Zeitlimit), aber noch nicht mit einer größeren Sammlung echter Lieder.
+- Bluetooth ist noch nicht getestet.
 - Wie die Tierstimmen klingen und wie gut die Erkennung „Kind spricht“ eingestellt ist, muss ein Mensch ausprobieren.
 - Der Google-Dienst `com.google.android.gms` ließ sich nicht ausblenden. Ohne Konto und Internet hat er keine Funktion.
 - Die Uhr des Telefons bestimmt, wann ein neuer Tag beginnt. Ohne Internet stellt sie sich nicht selbst nach.
