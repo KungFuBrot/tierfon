@@ -1,0 +1,17 @@
+# Godot
+.godot/
+*.translation
+export_presets.cfg
+android/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Eigene Musik gehört nicht ins Repository
+*.mp3
+music/
+
+# System
+Thumbs.db
+.DS_Store
