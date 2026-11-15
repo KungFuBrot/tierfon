@@ -54,7 +54,7 @@ Das Projekt in Godot 4.7 öffnen und starten. Das Tier reagiert auf das Mikrofon
 
 - Läuft die Musik bei ausgeschaltetem Bildschirm weiter? Muss mit Godot auf dem Gerät getestet werden.
 - Das eigene Kamerabild in der Ecke („wie FaceTime“) ist in Godot auf Android unsicher und nur als optionales Extra eingeplant.
-- Für den Android-Export fehlen auf dem Entwicklungsrechner noch Android SDK und JDK.
+- Die APK lässt sich bauen (`build/tierfon.apk`), ist aber noch nicht auf dem Moto G installiert und getestet.
 - Wie gut die Erkennung „Kind spricht“ mit dem Mikrofon des Moto G funktioniert, zeigt erst der Test auf dem Gerät.
 
 ## Was nicht ins Repository gehört
