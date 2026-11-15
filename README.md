@@ -1,10 +1,12 @@
 # Tierfon
 
-Ein Kindertelefon zum Spielen auf einem alten Moto G (3. Generation). Das Kind kann Tiere „anrufen“ und Musik hören. Internet gibt es auf dem Gerät nicht.
+Ein Kindertelefon zum Spielen auf einem alten Moto G (3. Generation). Das Kind kann Tiere „anrufen“, Musik hören und Fotos ansehen, höchstens 30 Minuten am Tag. Internet gibt es auf dem Gerät nicht.
 
-**Stand:** Etappe 1 läuft im Godot-Editor auf dem PC: Startbildschirm, Tierauswahl und der Anruf beim Frosch. Auf dem Moto G ist es noch nicht getestet.
+**Stand:** Die App läuft auf dem Moto G: Startbildschirm, Tierauswahl, Anruf beim Frosch, Musikplayer (noch ohne Lieder getestet) und das Zeitlimit mit Batteriesymbol. Die Sperre ist programmiert, aber auf dem Gerät noch nicht aktiviert.
 
-![Der Frosch im Anruf](shots/call.png)
+| Startbildschirm | Anruf beim Frosch | Musik |
+|---|---|---|
+| ![Startbildschirm](shots/home.png) | ![Frosch](shots/call.png) | ![Musik](shots/music.png) |
 
 ## Zielgerät
 
@@ -14,51 +16,97 @@ Ein Kindertelefon zum Spielen auf einem alten Moto G (3. Generation). Das Kind k
 | System | LineageOS 14.1 (Android 7.1.2, API-Level 25) |
 | Bildschirm | 5 Zoll, 720 × 1280, Hochformat |
 
-## Genau zwei Apps
+## Was das Kind benutzen kann
 
-Auf dem Telefon gibt es für das Kind nur zwei Dinge: **Tiere anrufen** und **Musik**. Der Startbildschirm zeigt genau diese zwei großen Kacheln. Alles andere (Einstellungen, Browser, übrige Android-Apps) wird deaktiviert oder ist nur über den Elternbereich erreichbar.
+Der Startbildschirm zeigt drei Kacheln. Alles andere auf dem Telefon ist entfernt, ausgeblendet oder gesperrt.
 
-## Was die Apps können
-
-- **Tiere anrufen:** Frosch, Igel, Waschbär und Brontosaurus. Es klingelt, das Tier nimmt ab und erscheint bildschirmfüllend wie bei einem Videoanruf.
+- **Tiere anrufen:** Es klingelt, das Tier nimmt ab und erscheint bildschirmfüllend wie bei einem Videoanruf. Bisher gibt es den Frosch; Igel, Waschbär und Brontosaurus folgen.
 - **Reagieren auf Sprache:** Das Mikrofon misst nur die Lautstärke. Spricht das Kind, hört das Tier zu. Wird es still, blabbert das Tier in seiner eigenen Stimme zurück. Es wird nichts aufgenommen oder gespeichert.
-- **Berührung:** Antippen löst kleine Reaktionen aus (kichern, hüpfen).
-- **Musikplayer:** Spielt MP3-Dateien aus einem Ordner auf dem Telefon, mit großen Tasten.
-- **Bluetooth:** Für Box oder Kopfhörer. Die Eltern koppeln das Gerät einmal in den Android-Einstellungen, danach verbindet es sich automatisch.
-- **Kiosk:** Tierfon ersetzt den Android-Startbildschirm, sodass nur die zwei Apps sichtbar sind. Ein versteckter Elternbereich (lange drücken und PIN) führt heraus.
+- **Berührung:** Antippen lässt das Tier hüpfen und kurz quaken.
+- **Musik:** Spielt MP3-Dateien aus dem Ordner `Music` des Telefons, mit drei großen Tasten. Die Musik läuft bei ausgeschaltetem Bildschirm weiter.
+- **Galerie:** Die vorhandene Android-App, über eine eigene Kachel erreichbar.
+- **Kamera:** Für das Kind gesperrt. Die Eltern können sie im Elternbereich freigeben, dann erscheint eine vierte Kachel.
 
-## Kein Internet
+## Spielzeit: 30 Minuten am Tag
 
-- Keine SIM-Karte, gespeicherte WLANs gelöscht, Flugmodus mit eingeschaltetem Bluetooth
-- Die App fordert keine Internet-Berechtigung an
-- Browser und alle nicht benötigten Apps werden deaktiviert
+- Gezählt wird jede Sekunde, in der der Bildschirm an ist, auch in der Galerie.
+- Ein Batteriesymbol oben rechts zeigt, wie viel Zeit heute noch übrig ist (grün, gelb, rot).
+- Ist die Zeit aufgebraucht, stoppt die Musik, der Bildschirm wird schwarz und reagiert nicht mehr. Nach wenigen Sekunden schaltet er sich aus.
+- Am nächsten Kalendertag stehen wieder 30 Minuten zur Verfügung.
+- Musik bei ausgeschaltetem Bildschirm verbraucht keine Spielzeit, endet aber, sobald die Zeit aufgebraucht ist.
+- Die Eltern können die Zeit im Elternbereich zurücksetzen.
+
+## Die Sperre
+
+Tierfon wird per `adb` als „Gerätebesitzer“ eingetragen. Damit kann die App:
+
+- der einzige Startbildschirm sein,
+- das Telefon in den Sperrmodus von Android versetzen: Statusleiste, Home-Taste und App-Übersicht sind abgeschaltet, erlaubt sind nur Tierfon und die Galerie,
+- alle anderen Apps mit Start-Symbol ausblenden (rückgängig machbar),
+- gespeicherte WLANs löschen, das WLAN ausschalten und WLAN-Einstellungen sperren,
+- das Installieren von Apps und den abgesicherten Modus sperren,
+- den Bildschirm ausschalten, wenn die Spielzeit vorbei ist.
+
+Die App selbst hat keine Internet-Berechtigung.
+
+### Rückwege
+
+1. **Am Telefon:** Auf dem Startbildschirm (oder auf dem schwarzen Bildschirm) die rechte obere Ecke drei Sekunden gedrückt halten und die PIN eingeben. Der Elternbereich setzt Sperre und Zeitlimit für 15 Minuten aus und führt zu den Bluetooth- und Android-Einstellungen. Dort lässt sich die Sperre auch vollständig aufheben.
+2. **Am PC:** `scripts/freigeben.sh` hebt die Sperre über USB auf und blendet alle Apps wieder ein. Dafür bleibt das USB-Debugging eingeschaltet.
+
+Die PIN ist nach der Installation `2580` und sollte im Elternbereich sofort geändert werden.
+
+## Bauen und einrichten
+
+Voraussetzungen: JDK 17, Android SDK (Build-Tools 35, Plattform 35) und Git Bash. Gradle wird nicht gebraucht.
+
+```bash
+bash build.sh
+```
+
+```bash
+bash scripts/einrichten.sh
+```
+
+`einrichten.sh` installiert die App, entfernt alle vom Nutzer installierten Apps und aktiviert die Sperre. Vorher müssen alle Konten vom Telefon entfernt sein (Einstellungen → Konten), sonst verweigert Android den Gerätebesitz.
+
+Musik kommt per USB aufs Telefon:
+
+```bash
+adb push lied.mp3 /sdcard/Music/
+```
+
+Die heute verbrauchte Spielzeit lässt sich vom PC aus setzen, hier auf 0 Minuten:
+
+```bash
+adb shell am broadcast -a de.kungfubrot.tierfon.SET_USED -n de.kungfubrot.tierfon/.ReleaseReceiver --ei minutes 0
+```
+
+Bluetooth-Boxen oder Kopfhörer koppeln die Eltern einmal über den Elternbereich. Danach verbinden sie sich automatisch.
 
 ## Technik
 
-- Alle Bilder werden im Code gezeichnet und alle Töne im Code erzeugt. Das Projekt enthält deshalb keine fremden Bild- oder Tondateien.
-- **Godot 4.7**, 2D, Renderer „Compatibility“ (wegen 1 GB RAM und alter Grafikeinheit)
-- Export als Android-App (APK), Installation per USB
-
-## Ausprobieren am PC
-
-Das Projekt in Godot 4.7 öffnen und starten. Das Tier reagiert auf das Mikrofon des PCs. Ohne Mikrofon simuliert die Leertaste „das Kind spricht“.
+- Native Android-App in Java, ohne Bibliotheken. Die APK ist rund 40 KB groß.
+- Alle Bilder werden im Code gezeichnet und alle Töne im Code erzeugt. Das Projekt enthält keine fremden Bild- oder Tondateien.
+- Der erste Versuch mit Godot 4 lief am PC, stürzte auf dem Moto G aber im alten Grafiktreiber (Adreno 306) ab. Er liegt noch in der Git-Historie.
 
 ## Etappen
 
-1. Grundgerüst mit einem Tier (Frosch), das auf das Mikrofon reagiert (am PC fertig); Test auf dem Gerät (offen)
-2. Die übrigen drei Tiere und der Anruf-Ablauf (klingeln, abnehmen, auflegen)
-3. Musikplayer
-4. Kiosk-Modus und Internet-Sperre
+1. Grundgerüst mit dem Frosch (fertig, läuft auf dem Gerät)
+2. Zeitlimit mit Batteriesymbol (fertig, auf dem Gerät getestet)
+3. Sperre auf dem Gerät aktivieren und prüfen (offen)
+4. Musikplayer mit echten Liedern und Bluetooth testen (offen)
+5. Die übrigen drei Tiere (offen)
 
 ## Offene Punkte
 
-- Läuft die Musik bei ausgeschaltetem Bildschirm weiter? Muss mit Godot auf dem Gerät getestet werden.
-- Das eigene Kamerabild in der Ecke („wie FaceTime“) ist in Godot auf Android unsicher und nur als optionales Extra eingeplant.
-- Die APK lässt sich bauen (`build/tierfon.apk`), ist aber noch nicht auf dem Moto G installiert und getestet.
-- Wie gut die Erkennung „Kind spricht“ mit dem Mikrofon des Moto G funktioniert, zeigt erst der Test auf dem Gerät.
+- Wie gut die Erkennung „Kind spricht“ mit dem Mikrofon des Moto G eingestellt ist, muss ein Mensch ausprobieren.
+- Die Galerie ist eine fremde App. Ob sich aus ihr heraus etwas Unerwünschtes öffnen lässt (zum Beispiel „Teilen“), ist erst mit aktiver Sperre zu prüfen.
+- Die Uhr des Telefons bestimmt, wann ein neuer Tag beginnt. Ohne Internet stellt sie sich nicht selbst nach.
+- Das eigene Kamerabild in der Ecke („wie FaceTime“) ist ein mögliches Extra.
 
 ## Was nicht ins Repository gehört
 
-- Die Eltern-PIN, Seriennummern und IMEI des Geräts
+- Die eigene Eltern-PIN, Seriennummern und IMEI des Geräts
 - Eigene MP3-Dateien (Urheberrecht)
 - Fotos oder Tonaufnahmen von Kindern

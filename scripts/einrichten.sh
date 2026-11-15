@@ -10,6 +10,8 @@ PKG=de.kungfubrot.tierfon
 
 [ -f build/tierfon.apk ] || bash build.sh
 "$ADB" install -t -r build/tierfon.apk
+# Erlaubt das Batteriesymbol über Kamera und Galerie.
+"$ADB" shell appops set "$PKG" SYSTEM_ALERT_WINDOW allow
 
 echo "Entferne vom Nutzer installierte Apps ..."
 for p in $("$ADB" shell pm list packages -3 | tr -d '\r' | sed 's/^package://'); do

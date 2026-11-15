@@ -1,11 +1,12 @@
 package de.kungfubrot.tierfon;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 
-/** Gemeinsames Verhalten aller Bildschirme: Vollbild und Sperre. */
+/** Gemeinsames Verhalten aller Bildschirme: Vollbild, Sperre, Spielzeit und Batteriesymbol. */
 abstract class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
@@ -18,10 +19,40 @@ abstract class BaseActivity extends Activity {
         return true;
     }
 
+    boolean showsBattery() {
+        return true;
+    }
+
+    /** Legt das Batteriesymbol oben rechts über den Inhalt. */
+    @Override
+    public void setContentView(View content) {
+        if (!showsBattery()) {
+            super.setContentView(content);
+            return;
+        }
+        FracLayout root = new FracLayout(this);
+        root.add(content, 0, 0, 1, 1);
+        root.add(new BatteryView(this), 0.80f, 0.0125f, 0.96f, 0.0585f);
+        super.setContentView(root);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (locks()) Kiosk.lock(this);
+        Usage.resumed++;
+        UsageService.ensureRunning(this);
+        if (locks()) {
+            Kiosk.lock(this);
+            if (Usage.exhausted(this) && !(this instanceof BlockedActivity)) {
+                startActivity(new Intent(this, BlockedActivity.class));
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Usage.resumed = Math.max(0, Usage.resumed - 1);
     }
 
     @Override

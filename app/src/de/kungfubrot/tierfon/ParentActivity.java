@@ -24,6 +24,11 @@ public class ParentActivity extends BaseActivity {
     }
 
     @Override
+    boolean showsBattery() {
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         if (Kiosk.parentMode(this)) {
@@ -117,6 +122,17 @@ public class ParentActivity extends BaseActivity {
         col.addView(label(Kiosk.isOwner(this)
             ? "Die Sperre ist für 15 Minuten ausgesetzt."
             : "Die Sperre ist nicht eingerichtet (Tierfon ist kein Gerätebesitzer).", 18));
+        long left = (Usage.remainingMs(this) + 59_999) / 60_000;
+        col.addView(label("Spielzeit heute: noch " + left + " von 30 Minuten.", 18));
+        col.addView(button("Spielzeit zurücksetzen", () -> {
+            Usage.setUsedMs(this, 0);
+            showMenu();
+        }));
+        boolean cam = Kiosk.cameraAllowed(this);
+        col.addView(button(cam ? "Kamera für das Kind sperren" : "Kamera für das Kind freigeben", () -> {
+            Kiosk.setCameraAllowed(this, !cam);
+            showMenu();
+        }));
         col.addView(button("Bluetooth-Einstellungen",
             () -> open(Settings.ACTION_BLUETOOTH_SETTINGS)));
         col.addView(button("Android-Einstellungen", () -> open(Settings.ACTION_SETTINGS)));

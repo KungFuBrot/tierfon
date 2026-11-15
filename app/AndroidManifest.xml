@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Für das Batteriesymbol über Kamera und Galerie. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- Nur um gespeicherte WLANs zu löschen und das WLAN auszuschalten. -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -36,8 +38,13 @@
         <activity android:name=".CallActivity" android:screenOrientation="portrait" />
         <activity android:name=".MusicActivity" android:screenOrientation="portrait" />
         <activity android:name=".ParentActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".BlockedActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <service android:name=".MusicService" />
+        <service android:name=".UsageService" />
 
         <receiver
             android:name=".AdminReceiver"
@@ -56,6 +63,7 @@
             android:permission="android.permission.DUMP">
             <intent-filter>
                 <action android:name="de.kungfubrot.tierfon.RELEASE" />
+                <action android:name="de.kungfubrot.tierfon.SET_USED" />
             </intent-filter>
         </receiver>
     </application>

@@ -25,12 +25,13 @@ import java.util.Set;
  * Voraussetzung ist, dass Tierfon per adb als "Gerätebesitzer" eingetragen wurde.
  */
 final class Kiosk {
-    /** Apps, die das Kind benutzen darf. */
-    static final String[] ALLOWED = {
-        "de.kungfubrot.tierfon", "org.cyanogenmod.snap", "com.android.gallery3d"};
+    static final String CAMERA = "org.cyanogenmod.snap";
+    static final String GALLERY = "com.android.gallery3d";
+    /** Apps, die das Kind immer benutzen darf. Die Kamera kommt nur dazu, wenn die Eltern sie freigeben. */
+    private static final String[] ALLOWED = {"de.kungfubrot.tierfon", GALLERY};
     /** Bleiben vorhanden, sind in der Sperre aber nicht erreichbar. */
     private static final String[] KEEP = {
-        "com.android.settings", "org.cyanogenmod.audiofx", "com.android.documentsui"};
+        "com.android.settings", "org.cyanogenmod.audiofx", "com.android.documentsui", CAMERA};
     private static final String[] RESTRICTIONS = {
         UserManager.DISALLOW_CONFIG_WIFI, UserManager.DISALLOW_INSTALL_APPS,
         UserManager.DISALLOW_SAFE_BOOT, UserManager.DISALLOW_ADD_USER};
@@ -66,6 +67,20 @@ final class Kiosk {
         prefs(c).edit().putLong("parentUntil", until).apply();
     }
 
+    static boolean cameraAllowed(Context c) {
+        return prefs(c).getBoolean("camera", false);
+    }
+
+    static void setCameraAllowed(Context c, boolean on) {
+        prefs(c).edit().putBoolean("camera", on).apply();
+        if (isOwner(c)) dpm(c).setLockTaskPackages(admin(c), allowed(c));
+    }
+
+    private static String[] allowed(Context c) {
+        if (!cameraAllowed(c)) return ALLOWED;
+        return new String[] {ALLOWED[0], ALLOWED[1], CAMERA};
+    }
+
     static String pin(Context c) {
         return prefs(c).getString("pin", "2580");
     }
@@ -96,7 +111,8 @@ final class Kiosk {
         DevicePolicyManager d = dpm(c);
         ComponentName ad = admin(c);
         String me = c.getPackageName();
-        d.setLockTaskPackages(ad, ALLOWED);
+        d.setLockTaskPackages(ad, allowed(c));
+        d.setKeyguardDisabled(ad, true);
         for (String r : RESTRICTIONS) d.addUserRestriction(ad, r);
         for (String perm : new String[] {
                 Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE}) {
@@ -145,6 +161,15 @@ final class Kiosk {
         }
     }
 
+    /** Schaltet den Bildschirm aus. Geht nur als Gerätebesitzer. */
+    static void screenOff(Context c) {
+        if (!isOwner(c)) return;
+        try {
+            dpm(c).lockNow();
+        } catch (RuntimeException ignored) {
+        }
+    }
+
     /** Hebt die Sperre vollständig auf: Apps wieder einblenden, Gerätebesitz abgeben. */
     static void release(Context c) {
         if (!isOwner(c)) return;
@@ -158,6 +183,7 @@ final class Kiosk {
             }
         }
         for (String r : RESTRICTIONS) d.clearUserRestriction(ad, r);
+        d.setKeyguardDisabled(ad, false);
         d.clearPackagePersistentPreferredActivities(ad, me);
         d.setLockTaskPackages(ad, new String[0]);
         d.clearDeviceOwnerApp(me);
