@@ -1,8 +1,6 @@
-# Godot
-.godot/
-*.translation
+# Bau-Ergebnisse
+build/
 *.apk
-*.aab
 *.keystore
 *.jks
 
@@ -13,4 +11,3 @@ music/
 # System
 Thumbs.db
 .DS_Store
-build/

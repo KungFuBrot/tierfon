@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.kungfubrot.tierfon"
+    android:versionCode="2"
+    android:versionName="0.2">
+
+    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="25" />
+
+    <!-- Bewusst keine INTERNET-Berechtigung. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Nur um gespeicherte WLANs zu löschen und das WLAN auszuschalten. -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- testOnly erlaubt es, die Sperre notfalls vom PC aus per adb zu entfernen. -->
+    <application
+        android:label="Tierfon"
+        android:allowBackup="false"
+        android:testOnly="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen">
+
+        <activity
+            android:name=".HomeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".AnimalsActivity" android:screenOrientation="portrait" />
+        <activity android:name=".CallActivity" android:screenOrientation="portrait" />
+        <activity android:name=".MusicActivity" android:screenOrientation="portrait" />
+        <activity android:name=".ParentActivity" android:screenOrientation="portrait" />
+
+        <service android:name=".MusicService" />
+
+        <receiver
+            android:name=".AdminReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Rückweg vom PC: nur die adb-Shell besitzt die DUMP-Berechtigung. -->
+        <receiver
+            android:name=".ReleaseReceiver"
+            android:permission="android.permission.DUMP">
+            <intent-filter>
+                <action android:name="de.kungfubrot.tierfon.RELEASE" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
